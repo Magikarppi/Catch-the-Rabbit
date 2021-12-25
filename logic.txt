@@ -1,0 +1,15 @@
+2120
+
+vA = viimeisinArvaus
+sA = seuraavaArvaus
+
+arvausSykli = (a) => {
+	a
+	a - 1
+	a
+	a - 2
+}
+seuraava arvaus on viimeisin arvaus + 3
+sA = vA + 3
+
+arvausSyklin jälkeen a + 1
