@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+const allHoles = new Array(100);
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [rabbitHole, setRabbitHole] = useState<number>();
+  const [guessHole, setGuessHole] = useState<number>();
+
+  useEffect(() => {
+    // random between 0-100
+    const randomPosition = () => Math.floor(Math.random() * 101);
+
+    setRabbitHole(randomPosition());
+  }, []);
+
+  const makeAGuess = (guess: number) => {};
+
+  const startHunt = () => {
+    // while (rabbitHole !== guessHole) {}
+  };
+  const Hole = () => {
+    return <div style={{ width: 5, height: 5 }}>Active/Not active</div>;
+  };
+
+  const Holes = () => {
+    return (
+      <div>
+        {allHoles.map((hole) => (
+          <Hole />
+        ))}
+      </div>
+    );
+  };
+
+  return <div className="App"></div>;
 }
 
 export default App;

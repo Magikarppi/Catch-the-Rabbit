@@ -1,4 +1,20 @@
+_ _ _ _ _ _
+0 1 2 3 4 5
+_ _ _ r _ x
+0 1 2 3 4 5
+(
+jos rabbit on 0, 1, 2
+arvausSyklin aloitus (eka arvaus) on 2
+rabbit saadaan kiinni 
 2120
+)
+
+alusta 02211
+
+lopusta 53344
+
+ _   _   _   _
+97  98  99  100
 
 vA = viimeisinArvaus
 sA = seuraavaArvaus
