@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
-
-const allHoles = [...Array(51).keys()];
+import Holes from './components/Holes';
+import { allHolesLength } from './utils/utils';
 
 function App() {
   const [rabbitHole, setRabbitHole] = useState<number>();
@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     // random between 0-100
-    const randomPosition = () => Math.floor(Math.random() * 101);
+    const randomPosition = () => Math.floor(Math.random() * allHolesLength);
 
     setRabbitHole(randomPosition());
   }, []);
@@ -76,19 +76,6 @@ function App() {
   //   // while (rabbitHole !== guessHole) {}
   //   setGuessHole(selectedHole);
   // };
-  const Hole = ({ holeNum }: { holeNum: number }) => {
-    return <div className="Hole"></div>;
-  };
-
-  const Holes = () => {
-    return (
-      <div className="Holes">
-        {allHoles.map((_, i) => (
-          <Hole key={i} holeNum={i} />
-        ))}
-      </div>
-    );
-  };
 
   const KillScreen = () => {
     return (
@@ -100,7 +87,7 @@ function App() {
 
   return (
     <div className="App">
-      <Holes />
+      <Holes rabbitHole={rabbitHole} />
       {kill && <KillScreen />}
     </div>
   );
