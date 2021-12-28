@@ -23,6 +23,24 @@ function App() {
   //   }, 500);
   // }
 
+  // have a counter for moving the rabbit and the hunter? So in moves happen turns. Game starts after hunter has made the first
+  // guess (that is a wrong guess, right one would end the game right away) -> rabbit moves "first" then hunter.
+  // So hunters movement counter can never be higher than rabbit's. And never more than one apart.
+  // if ((rabbitMoveCounter - hunterMoveCounter) > 1) {
+  //   return;
+  // }
+  // if (rabbitMoveCounter < hunterMoveCounter) {
+  //   return;
+  // }
+
+  // if (rabbitMoveCounter === hunterMoveCounter) {
+  //   // move rabbit
+  // }
+
+  // if (rabbitMoveCounter > hunterMoveCounter) {
+  //   // move hunter
+  // }
+
   useEffect(() => {
     // random between 0-100
 
