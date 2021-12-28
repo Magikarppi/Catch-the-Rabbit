@@ -11,9 +11,20 @@ function App() {
   console.log('rabbitHole', rabbitHole);
   console.log('guessHole', guessHole);
 
+  const randomPosition = () => Math.floor(Math.random() * allHolesLength);
+
+  let x = 0;
+
+  // while (x < 10) {
+  //   console.log('x', x);
+  //   setTimeout(() => {
+  //     setRabbitHole(randomPosition());
+  //     x++;
+  //   }, 500);
+  // }
+
   useEffect(() => {
     // random between 0-100
-    const randomPosition = () => Math.floor(Math.random() * allHolesLength);
 
     setRabbitHole(randomPosition());
   }, []);
@@ -77,6 +88,10 @@ function App() {
   //   setGuessHole(selectedHole);
   // };
 
+  const selectHuntStartHole = (holeNum: number) => {
+    setGuessHole(holeNum);
+  };
+
   const KillScreen = () => {
     return (
       <div>
@@ -87,7 +102,11 @@ function App() {
 
   return (
     <div className="App">
-      <Holes rabbitHole={rabbitHole} />
+      <Holes
+        rabbitHole={rabbitHole}
+        guessHole={guessHole}
+        handleClick={selectHuntStartHole}
+      />
       {kill && <KillScreen />}
     </div>
   );

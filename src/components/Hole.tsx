@@ -1,9 +1,17 @@
 import { HoleProps } from '../types';
 
-const Hole = ({ holeNum, rabbitHole }: HoleProps) => {
+const Hole = ({ holeNum, rabbitHole, guessHole, handleClick }: HoleProps) => {
   const hasRabbit = holeNum === rabbitHole;
-  console.log('hasrabbit, index', holeNum, hasRabbit);
-  return <div className="Hole">{hasRabbit && 'X'}</div>;
+  const hasHunter = holeNum === guessHole;
+  const rabbitCaught = hasRabbit && hasHunter;
+
+  return (
+    <div className="Hole" onClick={() => handleClick(holeNum)}>
+      {hasRabbit && 'R'}
+      {hasHunter && 'H'}
+      {rabbitCaught && 'K'}
+    </div>
+  );
 };
 
 export default Hole;
