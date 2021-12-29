@@ -1,19 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import './App.css';
 import Holes from './components/Holes';
+import KillScreen from './components/KillScreen';
 import { allHolesLength } from './utils/utils';
 
 function App() {
   const [rabbitHole, setRabbitHole] = useState<number>();
   const [guessHole, setGuessHole] = useState<number>();
   const [kill, setKill] = useState<boolean>(false);
+  const [rabbitMoveCounter, setRabbitMoveCounter] = useState<number>(0);
+  const [hunterMoveCounter, setHunterMoveCounter] = useState<number>(0);
+
+  // let rabbitMoveCounter = useRef<number>(0);
+  // let hunterMoveCounter = useRef<number>(0);
 
   console.log('rabbitHole', rabbitHole);
   console.log('guessHole', guessHole);
+  console.log('rabbitMoveCounter', rabbitMoveCounter);
+  console.log('hunterMoveCounter', hunterMoveCounter);
 
   const randomPosition = () => Math.floor(Math.random() * allHolesLength);
 
-  let x = 0;
+  const hunterMoves = useCallback(() => {
+    if (rabbitMoveCounter > hunterMoveCounter) {
+      console.log('hunter moves ()');
+    }
+
+    setGuessHole(3);
+
+    setHunterMoveCounter((prev) => prev + 1);
+  }, []);
+
+  const rabbitMoves = useCallback(() => {
+    if (hunterMoveCounter === rabbitMoveCounter) {
+      if (rabbitHole === allHolesLength) {
+        return setRabbitHole(allHolesLength - 1);
+      }
+
+      if (rabbitHole === 0) {
+        return setRabbitHole(1);
+      }
+
+      const randomNum = Math.random();
+
+      if (randomNum > 0.5) {
+        setRabbitHole((prevState) => prevState! + 1);
+      } else {
+        setRabbitHole((prevState) => prevState! - 1);
+      }
+
+      setRabbitMoveCounter((prev) => prev + 1);
+      // rabbitMoveCounter++
+    }
+  }, [rabbitHole]);
 
   // while (x < 10) {
   //   console.log('x', x);
@@ -41,33 +80,33 @@ function App() {
   //   // move hunter
   // }
 
+  // For initializing game with rabbit position
   useEffect(() => {
-    // random between 0-100
-
     setRabbitHole(randomPosition());
+    // Rabbit moves first
+    setRabbitMoveCounter((prev) => prev + 1);
   }, []);
 
-  const hunterMoves = () => {
-    // 02211
-    // 13322
-    // 24433
-    // a         (0)
-    // a + 2     (2)
-    // (u)a      (2)
-    // (u) - 1   (1)
-    // (u)a      (1)
-    // (u)a + 1  (2)
-    // (eka)
-    // a
-    // a + 2
-    // a
-    // a - 1
-    // a
-    // (seuraavat)
-    // a + 1
-    // ...
-    setGuessHole(3);
-  };
+  // For movements
+  useEffect(() => {
+    if (rabbitMoveCounter - hunterMoveCounter > 1) {
+      return console.log("Rabbit/Hunter movements don't happen in turns");
+    }
+
+    if (rabbitMoveCounter < hunterMoveCounter) {
+      return console.log('Hunter is skipping ahead');
+    }
+
+    if (hunterMoveCounter === rabbitMoveCounter) {
+      console.log('rabbit moves useffect');
+      rabbitMoves();
+    }
+
+    if (rabbitMoveCounter > hunterMoveCounter) {
+      console.log('hunter moves useffect');
+      hunterMoves();
+    }
+  }, [hunterMoveCounter, rabbitMoveCounter, rabbitMoves, hunterMoves]);
 
   useEffect(() => {
     if (!rabbitHole || kill) {
@@ -77,24 +116,6 @@ function App() {
     if (rabbitHole === guessHole) {
       return setKill(true);
     }
-
-    const rabbitMoves = () => {
-      if (rabbitHole === 100) {
-        return setRabbitHole(99);
-      }
-
-      if (rabbitHole === 0) {
-        return setRabbitHole(1);
-      }
-
-      const randomNum = Math.random();
-
-      if (randomNum > 0.5) {
-        return setRabbitHole((prevState) => prevState! + 1);
-      } else {
-        return setRabbitHole((prevState) => prevState! - 1);
-      }
-    };
 
     // rabbitMoves();
   }, [rabbitHole, guessHole, kill]);
@@ -108,14 +129,6 @@ function App() {
 
   const selectHuntStartHole = (holeNum: number) => {
     setGuessHole(holeNum);
-  };
-
-  const KillScreen = () => {
-    return (
-      <div>
-        <p>Rabbit caught and slaughtered</p>
-      </div>
-    );
   };
 
   return (
