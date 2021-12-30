@@ -1,15 +1,15 @@
 type RabbitHole = number | undefined;
-type GuessHole = number | undefined;
+type HunterHole = number | undefined;
 
 export interface HoleProps {
   holeNum: number;
   rabbitHole: RabbitHole;
-  guessHole: GuessHole;
+  hunterHole: HunterHole;
   handleClick: (holeNum: number) => void;
 }
 
 export interface HolesProps {
   rabbitHole: RabbitHole;
-  guessHole: GuessHole;
+  hunterHole: HunterHole;
   handleClick: (holeNum: number) => void;
 }

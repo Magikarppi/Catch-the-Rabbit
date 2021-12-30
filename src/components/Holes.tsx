@@ -3,7 +3,7 @@ import { HolesProps } from '../types';
 import { allHoles } from '../utils/utils';
 import Hole from './Hole';
 
-const Holes = ({ rabbitHole, handleClick, guessHole }: HolesProps) => {
+const Holes = ({ rabbitHole, handleClick, hunterHole }: HolesProps) => {
   return (
     <div className="Holes">
       {allHoles.map((_, i) => (
@@ -12,7 +12,7 @@ const Holes = ({ rabbitHole, handleClick, guessHole }: HolesProps) => {
           holeNum={i}
           rabbitHole={rabbitHole}
           handleClick={handleClick}
-          guessHole={guessHole}
+          hunterHole={hunterHole}
         />
       ))}
     </div>

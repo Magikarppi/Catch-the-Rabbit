@@ -1,8 +1,8 @@
 import { HoleProps } from '../types';
 
-const Hole = ({ holeNum, rabbitHole, guessHole, handleClick }: HoleProps) => {
+const Hole = ({ holeNum, rabbitHole, hunterHole, handleClick }: HoleProps) => {
   const hasRabbit = holeNum === rabbitHole;
-  const hasHunter = holeNum === guessHole;
+  const hasHunter = holeNum === hunterHole;
   const rabbitCaught = hasRabbit && hasHunter;
 
   return (
