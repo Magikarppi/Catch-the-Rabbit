@@ -21,6 +21,8 @@ function App() {
 
   const randomPosition = () => Math.floor(Math.random() * allHolesLength);
 
+  const firstRoundDone = hunterMoveCounter > 0 && rabbitMoveCounter > 0;
+
   const hunterMoves = useCallback(() => {
     if (rabbitMoveCounter > hunterMoveCounter) {
       console.log('hunter moves ()');
@@ -96,6 +98,9 @@ function App() {
   // For movements
   useEffect(() => {
     console.log('movement useeffect runs');
+    console.log('rabbitMoveCounter :: useEffect', rabbitMoveCounter);
+    console.log('hunterMoveCounter :: useEffect', hunterMoveCounter);
+
     if (rabbitMoveCounter - hunterMoveCounter > 1) {
       return console.log("Rabbit/Hunter movements don't happen in turns");
     }
@@ -104,40 +109,40 @@ function App() {
       return console.log('Hunter is skipping ahead');
     }
 
-    if (
-      hunterMoveCounter === rabbitMoveCounter &&
-      hunterMoveCounter < 0 &&
-      rabbitMoveCounter < 0
-    ) {
+    console.log('h===R', hunterMoveCounter === rabbitMoveCounter);
+    console.log('frd', firstRoundDone);
+    console.log(
+      'rabbit should move: ',
+      hunterMoveCounter === rabbitMoveCounter && firstRoundDone
+    );
+    if (hunterMoveCounter === rabbitMoveCounter && firstRoundDone) {
       console.log('rabbit moves useffect');
       setTimeout(() => {
         rabbitMoves();
       }, 500);
     }
 
-    if (
-      rabbitMoveCounter > hunterMoveCounter &&
-      hunterMoveCounter < 0 &&
-      rabbitMoveCounter < 0
-    ) {
+    if (rabbitMoveCounter > hunterMoveCounter && firstRoundDone) {
       console.log('hunter moves useffect');
       setTimeout(() => {
         hunterMoves();
       }, 500);
     }
-  }, [hunterMoveCounter, rabbitMoveCounter, rabbitMoves, hunterMoves]);
+  }, [
+    hunterMoveCounter,
+    rabbitMoveCounter,
+    rabbitMoves,
+    hunterMoves,
+    hunterHole,
+    rabbitHole,
+    firstRoundDone,
+  ]);
 
   useEffect(() => {
-    if (!rabbitHole || kill) {
-      return;
-    }
-
-    if (rabbitHole === hunterHole) {
+    if (rabbitHole === hunterHole && firstRoundDone) {
       return setKill(true);
     }
-
-    // rabbitMoves();
-  }, [rabbitHole, hunterHole, kill]);
+  }, [rabbitHole, hunterHole, firstRoundDone, kill]);
 
   // const makeAGuess = (guess: number) => {};
 
@@ -148,6 +153,7 @@ function App() {
 
   const selectHuntStartHole = (holeNum: number) => {
     setHunterHole(holeNum);
+    setHunterMoveCounter((prev) => prev + 1);
   };
 
   return (
