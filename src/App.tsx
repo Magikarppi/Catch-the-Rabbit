@@ -10,6 +10,7 @@ function App() {
   const [kill, setKill] = useState<boolean>(false);
   const [rabbitMoveCounter, setRabbitMoveCounter] = useState<number>(0);
   const [hunterMoveCounter, setHunterMoveCounter] = useState<number>(0);
+  // const [whoMovedLast, setWhoMovedLast] = useState<string>();
 
   // let rabbitMoveCounter = useRef<number>(0);
   // let hunterMoveCounter = useRef<number>(0);
@@ -23,21 +24,32 @@ function App() {
 
   const firstRoundDone = hunterMoveCounter > 0 && rabbitMoveCounter > 0;
 
+  console.log('rm > hm', rabbitMoveCounter >= hunterMoveCounter);
+
   const hunterMoves = useCallback(() => {
     if (rabbitMoveCounter > hunterMoveCounter) {
       console.log('hunter moves ()');
+      if (hunterHole === allHolesLength) {
+        return setHunterHole(allHolesLength - 1);
+      }
+
+      if (hunterHole === 0) {
+        return setHunterHole(1);
+      }
 
       const randomNum = Math.random();
+      const randomInterval = () => Math.floor(Math.random() * 3) + 1;
+      const moveInterval = 2;
 
       if (randomNum > 0.5) {
-        setHunterHole((prevState) => prevState! + 1);
+        setHunterHole((prevState) => prevState! + randomInterval());
       } else {
-        setHunterHole((prevState) => prevState! - 1);
+        setHunterHole((prevState) => prevState! - randomInterval());
       }
 
       setHunterMoveCounter((prev) => prev + 1);
     }
-  }, [rabbitMoveCounter, hunterMoveCounter]);
+  }, [rabbitMoveCounter, hunterMoveCounter, hunterHole]);
 
   const rabbitMoves = useCallback(() => {
     if (hunterMoveCounter === rabbitMoveCounter) {
@@ -90,6 +102,7 @@ function App() {
 
   // For initializing game with rabbit position
   useEffect(() => {
+    console.log('game initializing useEffect');
     setRabbitHole(randomPosition());
     // Rabbit moves first
     setRabbitMoveCounter((prev) => prev + 1);
@@ -101,6 +114,11 @@ function App() {
     console.log('rabbitMoveCounter :: useEffect', rabbitMoveCounter);
     console.log('hunterMoveCounter :: useEffect', hunterMoveCounter);
 
+    // for testing, limit to prevent infinite looop
+    // if (rabbitMoveCounter > 10) return;
+
+    if (kill) return;
+
     if (rabbitMoveCounter - hunterMoveCounter > 1) {
       return console.log("Rabbit/Hunter movements don't happen in turns");
     }
@@ -109,24 +127,24 @@ function App() {
       return console.log('Hunter is skipping ahead');
     }
 
-    console.log('h===R', hunterMoveCounter === rabbitMoveCounter);
-    console.log('frd', firstRoundDone);
-    console.log(
-      'rabbit should move: ',
-      hunterMoveCounter === rabbitMoveCounter && firstRoundDone
-    );
     if (hunterMoveCounter === rabbitMoveCounter && firstRoundDone) {
       console.log('rabbit moves useffect');
-      setTimeout(() => {
+      const moveRabbitTimeout = setTimeout(() => {
         rabbitMoves();
       }, 500);
+      return () => {
+        clearTimeout(moveRabbitTimeout);
+      };
     }
 
     if (rabbitMoveCounter > hunterMoveCounter && firstRoundDone) {
       console.log('hunter moves useffect');
-      setTimeout(() => {
+      const moveHunterTimeout = setTimeout(() => {
         hunterMoves();
       }, 500);
+      return () => {
+        clearTimeout(moveHunterTimeout);
+      };
     }
   }, [
     hunterMoveCounter,
@@ -136,6 +154,7 @@ function App() {
     hunterHole,
     rabbitHole,
     firstRoundDone,
+    kill,
   ]);
 
   useEffect(() => {

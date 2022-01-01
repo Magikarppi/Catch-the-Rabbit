@@ -1,6 +1,6 @@
 const KillScreen = () => {
   return (
-    <div>
+    <div className="Kill">
       <p>Rabbit caught and slaughtered</p>
     </div>
   );
