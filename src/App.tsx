@@ -37,14 +37,25 @@ function App() {
         return setHunterHole(1);
       }
 
+      let moveInterval = 1;
       const randomNum = Math.random();
       const randomInterval = () => Math.floor(Math.random() * 3) + 1;
-      const moveInterval = 2;
 
+      // Every 2, 4, 6, ... move
+      if (hunterMoveCounter % 2 === 0) {
+        moveInterval = 2;
+      }
+
+      // Every 3, 6, 9, ... move
+      if (hunterMoveCounter % 3 === 0) {
+        moveInterval = 3;
+      }
+
+      // change to move towards rabbit
       if (randomNum > 0.5) {
-        setHunterHole((prevState) => prevState! + randomInterval());
+        setHunterHole((prevState) => prevState! + moveInterval);
       } else {
-        setHunterHole((prevState) => prevState! - randomInterval());
+        setHunterHole((prevState) => prevState! - moveInterval);
       }
 
       setHunterMoveCounter((prev) => prev + 1);
