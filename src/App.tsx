@@ -1,19 +1,14 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import './App.css';
+import React, { useEffect, useState, useCallback } from 'react';
 import Holes from './components/Holes';
-import KillScreen from './components/KillScreen';
+import Caught from './components/Caught';
 import { allHolesLength } from './utils/utils';
 
 function App() {
   const [rabbitHole, setRabbitHole] = useState<number>();
   const [hunterHole, setHunterHole] = useState<number>();
-  const [kill, setKill] = useState<boolean>(false);
+  const [caught, setCaught] = useState<boolean>(false);
   const [rabbitMoveCounter, setRabbitMoveCounter] = useState<number>(0);
   const [hunterMoveCounter, setHunterMoveCounter] = useState<number>(0);
-  // const [whoMovedLast, setWhoMovedLast] = useState<string>();
-
-  // let rabbitMoveCounter = useRef<number>(0);
-  // let hunterMoveCounter = useRef<number>(0);
 
   console.log('rabbitHole', rabbitHole);
   console.log('hunterHole', hunterHole);
@@ -24,9 +19,17 @@ function App() {
 
   const firstRoundDone = hunterMoveCounter > 0 && rabbitMoveCounter > 0;
 
-  console.log('rm > hm', rabbitMoveCounter >= hunterMoveCounter);
+  const handleRestart = () => {
+    setCaught(false);
+    setRabbitHole(undefined);
+    setHunterHole(undefined);
+    setRabbitMoveCounter(0);
+    setHunterMoveCounter(0);
+  };
 
   const hunterMoves = useCallback(() => {
+    if (!hunterHole || !rabbitHole) return;
+
     if (rabbitMoveCounter > hunterMoveCounter) {
       console.log('hunter moves ()');
       if (hunterHole === allHolesLength) {
@@ -51,16 +54,15 @@ function App() {
         moveInterval = 3;
       }
 
-      // change to move towards rabbit
-      if (randomNum > 0.5) {
-        setHunterHole((prevState) => prevState! + moveInterval);
-      } else {
+      if (rabbitHole <= hunterHole) {
         setHunterHole((prevState) => prevState! - moveInterval);
-      }
+      } else if (rabbitHole >= hunterHole) {
+        setHunterHole((prevState) => prevState! + moveInterval);
+      } else return;
 
       setHunterMoveCounter((prev) => prev + 1);
     }
-  }, [rabbitMoveCounter, hunterMoveCounter, hunterHole]);
+  }, [rabbitMoveCounter, hunterMoveCounter, hunterHole, rabbitHole]);
 
   const rabbitMoves = useCallback(() => {
     if (hunterMoveCounter === rabbitMoveCounter) {
@@ -81,54 +83,22 @@ function App() {
       }
 
       setRabbitMoveCounter((prev) => prev + 1);
-      // rabbitMoveCounter++
     }
   }, [rabbitHole, hunterMoveCounter, rabbitMoveCounter]);
-
-  // while (x < 10) {
-  //   console.log('x', x);
-  //   setTimeout(() => {
-  //     setRabbitHole(randomPosition());
-  //     x++;
-  //   }, 500);
-  // }
-
-  // have a counter for moving the rabbit and the hunter? So in moves happen turns. Game starts after hunter has made the first
-  // guess (that is a wrong guess, right one would end the game right away) -> rabbit moves "first" then hunter.
-  // So hunters movement counter can never be higher than rabbit's. And never more than one apart.
-  // if ((rabbitMoveCounter - hunterMoveCounter) > 1) {
-  //   return;
-  // }
-  // if (rabbitMoveCounter < hunterMoveCounter) {
-  //   return;
-  // }
-
-  // if (rabbitMoveCounter === hunterMoveCounter) {
-  //   // move rabbit
-  // }
-
-  // if (rabbitMoveCounter > hunterMoveCounter) {
-  //   // move hunter
-  // }
 
   // For initializing game with rabbit position
   useEffect(() => {
     console.log('game initializing useEffect');
-    setRabbitHole(randomPosition());
-    // Rabbit moves first
-    setRabbitMoveCounter((prev) => prev + 1);
-  }, []);
+    if (!caught) {
+      setRabbitHole(randomPosition());
+      // Rabbit moves first
+      setRabbitMoveCounter((prev) => prev + 1);
+    }
+  }, [caught]);
 
   // For movements
   useEffect(() => {
-    console.log('movement useeffect runs');
-    console.log('rabbitMoveCounter :: useEffect', rabbitMoveCounter);
-    console.log('hunterMoveCounter :: useEffect', hunterMoveCounter);
-
-    // for testing, limit to prevent infinite looop
-    // if (rabbitMoveCounter > 10) return;
-
-    if (kill) return;
+    if (caught) return;
 
     if (rabbitMoveCounter - hunterMoveCounter > 1) {
       return console.log("Rabbit/Hunter movements don't happen in turns");
@@ -165,21 +135,14 @@ function App() {
     hunterHole,
     rabbitHole,
     firstRoundDone,
-    kill,
+    caught,
   ]);
 
   useEffect(() => {
     if (rabbitHole === hunterHole && firstRoundDone) {
-      return setKill(true);
+      return setCaught(true);
     }
-  }, [rabbitHole, hunterHole, firstRoundDone, kill]);
-
-  // const makeAGuess = (guess: number) => {};
-
-  // const startHunt = (selectedHole: number) => {
-  //   // while (rabbitHole !== hunterHole) {}
-  //   setHunterHole(selectedHole);
-  // };
+  }, [rabbitHole, hunterHole, firstRoundDone, caught]);
 
   const selectHuntStartHole = (holeNum: number) => {
     setHunterHole(holeNum);
@@ -193,7 +156,7 @@ function App() {
         hunterHole={hunterHole}
         handleClick={selectHuntStartHole}
       />
-      {kill && <KillScreen />}
+      {caught && <Caught handleRestart={handleRestart} />}
     </div>
   );
 }

@@ -5,11 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: burlywood;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+p {
+  font-size: 17px;
 }
 
 .App {
@@ -43,8 +48,9 @@ code {
   text-align: center;
 }
 
-.Kill {
+.Caught {
   width: 50%;
   height: 80px;
   margin-top: 5%;
+  text-align: center;
 }

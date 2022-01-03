@@ -13,3 +13,7 @@ export interface HolesProps {
   hunterHole: HunterHole;
   handleClick: (holeNum: number) => void;
 }
+
+export interface CaughtProps {
+  handleRestart: () => void;
+}
