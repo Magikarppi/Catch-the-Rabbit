@@ -1,5 +1,5 @@
 import React from 'react';
-import { HolesProps } from '../types';
+import { HolesProps } from '../types/types';
 import { allHoles } from '../utils/utils';
 import Hole from './Hole';
 

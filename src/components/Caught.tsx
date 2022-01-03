@@ -1,4 +1,4 @@
-import { CaughtProps } from '../types';
+import { CaughtProps } from '../types/types';
 
 const Caught = ({ handleRestart }: CaughtProps) => {
   return (
