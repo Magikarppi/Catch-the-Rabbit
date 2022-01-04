@@ -1,2 +1,2 @@
-export const allHoles = [...Array(51).keys()];
+export const allHoles = [...Array(21).keys()];
 export const allHolesLength = allHoles.length;
