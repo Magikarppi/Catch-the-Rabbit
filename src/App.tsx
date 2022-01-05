@@ -98,6 +98,7 @@ function App() {
 
   // For movements
   useEffect(() => {
+    console.log('caught', caught);
     if (caught) return;
 
     if (rabbitMoveCounter - hunterMoveCounter > 1) {

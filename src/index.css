@@ -41,9 +41,10 @@ p {
 
 .Hole {
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   width: 50px;
+  height: 70px;
   border-bottom-style: solid;
   border-bottom-width: 5px;
   border-radius: 2px;
