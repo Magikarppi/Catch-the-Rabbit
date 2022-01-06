@@ -31,7 +31,6 @@ function App() {
     if (!hunterHole || !rabbitHole) return;
 
     if (rabbitMoveCounter > hunterMoveCounter) {
-      console.log('hunter moves ()');
       if (hunterHole === allHolesLength) {
         return setHunterHole(allHolesLength - 1);
       }
@@ -65,30 +64,28 @@ function App() {
   }, [rabbitMoveCounter, hunterMoveCounter, hunterHole, rabbitHole]);
 
   const rabbitMoves = useCallback(() => {
-    if (hunterMoveCounter === rabbitMoveCounter) {
-      if (rabbitHole === allHolesLength) {
-        return setRabbitHole(allHolesLength - 1);
-      }
-
-      if (rabbitHole === 0) {
-        return setRabbitHole(1);
-      }
-
-      const randomNum = Math.random();
-
-      if (randomNum > 0.5) {
-        setRabbitHole((prevState) => prevState! + 1);
-      } else {
-        setRabbitHole((prevState) => prevState! - 1);
-      }
-
-      setRabbitMoveCounter((prev) => prev + 1);
+    if (rabbitHole === allHolesLength) {
+      return setRabbitHole(allHolesLength - 1);
     }
-  }, [rabbitHole, hunterMoveCounter, rabbitMoveCounter]);
+
+    if (rabbitHole === 0) {
+      return setRabbitHole(1);
+    }
+
+    const randomNum = Math.random();
+
+    // rabbit moves randomly one hole either backwards or forwards
+    if (randomNum > 0.5) {
+      setRabbitHole((prevState) => prevState! + 1);
+    } else {
+      setRabbitHole((prevState) => prevState! - 1);
+    }
+
+    setRabbitMoveCounter((prev) => prev + 1);
+  }, [rabbitHole]);
 
   // For initializing game with rabbit position
   useEffect(() => {
-    console.log('game initializing useEffect');
     if (!caught) {
       setRabbitHole(randomPosition());
       // Rabbit moves first
@@ -98,7 +95,6 @@ function App() {
 
   // For movements
   useEffect(() => {
-    console.log('caught', caught);
     if (caught) return;
 
     if (rabbitMoveCounter - hunterMoveCounter > 1) {
@@ -109,8 +105,8 @@ function App() {
       return console.log('Hunter is skipping ahead');
     }
 
+    // rabbit moves
     if (hunterMoveCounter === rabbitMoveCounter && firstRoundDone) {
-      console.log('rabbit moves useffect');
       const moveRabbitTimeout = setTimeout(() => {
         rabbitMoves();
       }, 500);
@@ -119,8 +115,8 @@ function App() {
       };
     }
 
+    // hunter moves
     if (rabbitMoveCounter > hunterMoveCounter && firstRoundDone) {
-      console.log('hunter moves useffect');
       const moveHunterTimeout = setTimeout(() => {
         hunterMoves();
       }, 500);
@@ -139,12 +135,14 @@ function App() {
     caught,
   ]);
 
+  // check if hunter has catched the rabbit
   useEffect(() => {
     if (rabbitHole === hunterHole && firstRoundDone) {
       return setCaught(true);
     }
   }, [rabbitHole, hunterHole, firstRoundDone, caught]);
 
+  // player selects where hunter starts his hunt
   const selectHuntStartHole = (holeNum: number) => {
     setHunterHole(holeNum);
     setHunterMoveCounter((prev) => prev + 1);
