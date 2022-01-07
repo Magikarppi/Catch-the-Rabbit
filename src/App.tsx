@@ -2,8 +2,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Holes from './components/Holes';
 import Caught from './components/Caught';
 import { allHolesLength } from './utils/utils';
+import Errors from './components/Errors';
 
 function App() {
+  const [error, setError] = useState<string | null>(null);
   const [rabbitHole, setRabbitHole] = useState<number>();
   const [hunterHole, setHunterHole] = useState<number>();
   const [caught, setCaught] = useState<boolean>(false);
@@ -144,12 +146,20 @@ function App() {
 
   // player selects where hunter starts his hunt
   const selectHuntStartHole = (holeNum: number) => {
+    if (holeNum === rabbitHole) {
+      setError('Choose another hole...');
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+      return;
+    }
     setHunterHole(holeNum);
     setHunterMoveCounter((prev) => prev + 1);
   };
 
   return (
     <div className="App">
+      <Errors errMsg={error} />
       <Holes
         rabbitHole={rabbitHole}
         hunterHole={hunterHole}

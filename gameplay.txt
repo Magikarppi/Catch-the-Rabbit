@@ -1,0 +1,7 @@
+Mode 1:
+  Hunter can start wherever he wants (excluding the rabbit hole) and if he reaches either end of the array
+  the movement direction changes but possibly messes up the algorithm
+
+Mode 2:
+  Hunter starts from the hole 1 and moves in one general direction (algorithm can move back and forth,) but when reaches
+  the end without catching rabbit -> game over and lose
