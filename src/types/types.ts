@@ -14,6 +14,7 @@ export interface HolesProps {
   handleClick: (holeNum: number) => void;
 }
 
-export interface CaughtProps {
+export interface EndGameProps {
   handleRestart: () => void;
+  ending: 'caught' | 'escape';
 }
