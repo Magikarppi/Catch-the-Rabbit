@@ -19,6 +19,7 @@ code {
 
 p {
   font-size: 17px;
+  text-align: center;
 }
 
 .App {
@@ -48,7 +49,13 @@ p {
   border-bottom-style: solid;
   border-bottom-width: 5px;
   border-radius: 2px;
-  border-color: #291400;
+  border-color: #411f00;
+}
+
+.Grass {
+  width: 100%;
+  height: 5px;
+  background-color: lightgreen;
 }
 
 .Caught {
@@ -56,6 +63,15 @@ p {
   height: 200px;
   margin-top: 5%;
   text-align: center;
+}
+
+.EndGame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  height: 150px;
 }
 
 .ImageDiv {

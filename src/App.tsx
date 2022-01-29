@@ -4,6 +4,8 @@ import EndGame from './components/EndGame';
 import { allHolesLength } from './utils/utils';
 import Errors from './components/Errors';
 
+const moveDelay = 300;
+
 function App() {
   const [error, setError] = useState<string | null>(null);
   const [rabbitHole, setRabbitHole] = useState<number>();
@@ -72,16 +74,23 @@ function App() {
       return setRabbitHole(1);
     }
 
+    const hole = randomPosition();
+    if (hole === 0) {
+      setRabbitHole(hole + 1);
+    } else {
+      setRabbitHole(hole);
+    }
     const randomNum = Math.random();
 
-    // rabbit moves randomly one hole either backwards or forwards
-    if (randomNum > 0.5) {
-      setRabbitHole((prevState) => prevState! + 1);
-    } else {
-      setRabbitHole((prevState) => prevState! - 1);
-    }
+    // // rabbit moves randomly one hole either backwards or forwards
+    // if (randomNum > 0.5) {
+    //   setRabbitHole((prevState) => prevState! + 1);
+    // } else {
+    //   setRabbitHole((prevState) => prevState! - 1);
+    // }
 
     setRabbitMoveCounter((prev) => prev + 1);
+    return;
   }, [rabbitHole]);
 
   // For initializing game with rabbit position
@@ -114,7 +123,7 @@ function App() {
     if (hunterMoveCounter === rabbitMoveCounter && firstRoundDone) {
       const moveRabbitTimeout = setTimeout(() => {
         rabbitMoves();
-      }, 500);
+      }, moveDelay);
       return () => {
         clearTimeout(moveRabbitTimeout);
       };
@@ -124,7 +133,7 @@ function App() {
     if (rabbitMoveCounter > hunterMoveCounter && firstRoundDone) {
       const moveHunterTimeout = setTimeout(() => {
         hunterMoves();
-      }, 500);
+      }, moveDelay);
       return () => {
         clearTimeout(moveHunterTimeout);
       };
@@ -169,11 +178,13 @@ function App() {
   return (
     <div className="App">
       <Errors errMsg={error} />
+
       <Holes
         rabbitHole={rabbitHole}
         hunterHole={hunterHole}
         handleClick={selectHuntStartHole}
       />
+      <div className="Grass" />
       {caught && <EndGame handleRestart={handleRestart} ending="caught" />}
       {escape && <EndGame handleRestart={handleRestart} ending="caught" />}
     </div>

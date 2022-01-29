@@ -11,6 +11,7 @@ const EndGame = ({ handleRestart, ending }: EndGameProps) => {
       ) : (
         <p>Hunter falls to a river and rabbit escapes!</p>
       )}
+
       <button onClick={handleRestart}>Restart</button>
     </div>
   );
